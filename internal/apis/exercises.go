@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// RegisterExercisesRoutes function
 func RegisterExercisesRoutes(r *mux.Router) {
 	router := r.PathPrefix("exercises").Subrouter()
 

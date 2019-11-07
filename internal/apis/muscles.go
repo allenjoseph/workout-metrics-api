@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// RegisterMusclesRoutes function
 func RegisterMusclesRoutes(r *mux.Router) {
 	router := r.PathPrefix("muscles").Subrouter()
 

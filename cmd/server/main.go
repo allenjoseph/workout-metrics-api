@@ -4,14 +4,15 @@ import (
 	"net/http"
 
 	"github.com/allenjoseph/workout-metrics-api/internal/apis"
-	"github.com/gorilla/mux"
+	"github.com/allenjoseph/workout-metrics-api/internal/config"
+	"github.com/allenjoseph/workout-metrics-api/internal/db"
 )
 
 func main() {
-	r := mux.NewRouter()
+	config.LoadConfig()
+	db.OpenConnection()
 
-	apis.RegisterMusclesRoutes(r)
-	apis.RegisterExercisesRoutes(r)
+	appRoutes := apis.RegisterRoutes()
 
-	http.ListenAndServe(":8080", r)
+	panic(http.ListenAndServe(":8080", appRoutes))
 }
