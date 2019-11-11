@@ -15,3 +15,8 @@ func FailOnError(msg string, err error) {
 		logger.Panic(msg, err)
 	}
 }
+
+// LogInfo util function
+func LogInfo(msg string) {
+	logger.Info(msg)
+}
