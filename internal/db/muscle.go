@@ -6,44 +6,36 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Muscle struct
+// Muscle struct defines a muscle
 type Muscle struct {
 	gorm.Model
 	Name        string
 	Description string
 }
 
-// MuscleRepository interface
-type MuscleRepository interface {
+// Repository interface provides access to the muscles storage
+type Repository interface {
 	ListMuscles(ctx context.Context) ([]Muscle, error)
-	Close()
 }
 
-var r MuscleRepository
+////////////////////////////////////////
 
-// SetRepository func
-func SetRepository(repository MuscleRepository) {
-	r = repository
+// MuscleStorage struct stores muscle data in DB
+type MuscleStorage struct {
+	db *gorm.DB
 }
 
-// ListMuscles func
-func ListMuscles(ctx context.Context) ([]Muscle, error) {
-	return r.ListMuscles(ctx)
+// NewMuscleStorage func returns a new muscles storage
+func NewMuscleStorage() *MuscleStorage {
+	storage := new(MuscleStorage)
+	storage.db = OpenConnection()
+
+	return storage
 }
 
-// Close func
-func Close() {
-	r.Close()
-}
-
-// MuscleRepositoryImpl struct
-type MuscleRepositoryImpl struct {
-	Client *Client
-}
-
-// ListMuscles implementation
-func (r *MuscleRepositoryImpl) ListMuscles(ctx context.Context) ([]Muscle, error) {
+// ListMuscles func returns all muscles
+func (s *MuscleStorage) ListMuscles(ctx context.Context) ([]Muscle, error) {
 	var muscles []Muscle
-	err := r.Client.db.Find(&muscles).Error
+	err := s.db.Find(&muscles).Error
 	return muscles, err
 }

@@ -9,31 +9,27 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var service services.MuscleService
-
 // RegisterMusclesRoutes function
 func RegisterMusclesRoutes(r *mux.Router) {
-	router := r.PathPrefix("muscles").Subrouter()
 
-	router.HandleFunc("/", getMuscles).Methods("GET")
-	router.HandleFunc("/{id}", getMuscle).Methods("GET")
+	musclesStorage := db.NewMuscleStorage()
+	musclesService := services.NewService(musclesStorage)
 
-	client := db.OpenConnection()
-	repository := db.MuscleRepositoryImpl{
-		Client: client,
-	}
-	service = services.MuscleService{
-		Repo: &repository,
-	}
+	sr := r.PathPrefix("/muscles").Subrouter()
+
+	sr.HandleFunc("/", getMuscles(musclesService)).Methods("GET")
+	sr.HandleFunc("/{id}/", getMuscle).Methods("GET")
 }
 
-func getMuscles(w http.ResponseWriter, r *http.Request) {
-	muscles, err := service.ListMuscles(r.Context())
-	if err != nil {
-		util.RespondError(w, http.StatusInternalServerError, err.Error())
-		return
+func getMuscles(s services.Service) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		muscles, err := s.ListMuscles(r.Context())
+		if err != nil {
+			util.RespondError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		util.RespondJSON(w, http.StatusOK, muscles)
 	}
-	util.RespondJSON(w, http.StatusOK, muscles)
 }
 
 func getMuscle(w http.ResponseWriter, r *http.Request) {

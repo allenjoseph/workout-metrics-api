@@ -5,9 +5,14 @@ import (
 	"net/http"
 )
 
+// ErrorResponse struct defines Error response
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 // RespondError func
 func RespondError(w http.ResponseWriter, code int, message string) {
-	RespondJSON(w, code, message)
+	RespondJSON(w, code, ErrorResponse{Error: message})
 }
 
 // RespondJSON func
