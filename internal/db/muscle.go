@@ -29,6 +29,7 @@ type MuscleStorage struct {
 func NewMuscleStorage() *MuscleStorage {
 	storage := new(MuscleStorage)
 	storage.db = OpenConnection()
+	storage.db.AutoMigrate(&Muscle{})
 
 	return storage
 }

@@ -13,6 +13,6 @@ func OpenConnection() *gorm.DB {
 	db, err := gorm.Open("postgres", dataSource)
 
 	util.FailOnError("Failed to open db connection", err)
-	util.LogInfo("DB connection opened")
+	util.LogInfo("DB connection opened", nil)
 	return db
 }

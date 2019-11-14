@@ -16,7 +16,17 @@ func FailOnError(msg string, err error) {
 	}
 }
 
+// LogOnError util function
+func LogOnError(msg string, err error) {
+	if logger == nil {
+		logger = logrus.New()
+	}
+	if err != nil {
+		LogInfo(msg, err)
+	}
+}
+
 // LogInfo util function
-func LogInfo(msg string) {
-	logger.Info(msg)
+func LogInfo(msg string, extra interface{}) {
+	logger.Info(msg, extra)
 }
