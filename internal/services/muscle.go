@@ -9,6 +9,7 @@ import (
 // Service interface provides list muscles operations
 type Service interface {
 	ListMuscles(ctx context.Context) ([]db.Muscle, error)
+	CreateMuscle(ctx context.Context, muscle *db.Muscle)
 }
 
 type service struct {
@@ -23,4 +24,9 @@ func NewService(repo *db.MuscleStorage) Service {
 // ListMuscles func list of muscles from the database
 func (s *service) ListMuscles(ctx context.Context) ([]db.Muscle, error) {
 	return s.repo.ListMuscles(ctx)
+}
+
+// CreateMuscle func list of muscles from the database
+func (s *service) CreateMuscle(ctx context.Context, muscle *db.Muscle) {
+	s.repo.CreateMuscle(ctx, muscle)
 }

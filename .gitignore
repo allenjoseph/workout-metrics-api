@@ -13,3 +13,6 @@
 
 # Conf file
 config.yml
+
+# VSCode
+.vscode
