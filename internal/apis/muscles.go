@@ -40,6 +40,9 @@ func addMuscle(s services.Service) func(w http.ResponseWriter, r *http.Request) 
 		var muscle db.Muscle
 		err := decoder.Decode(&muscle)
 		util.LogOnError("Failed to add muscle", err)
+		s.CreateMuscle(r.Context(), &muscle)
+
+		util.RespondJSON(w, http.StatusOK, muscle)
 	}
 }
 

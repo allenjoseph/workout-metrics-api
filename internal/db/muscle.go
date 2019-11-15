@@ -8,14 +8,15 @@ import (
 
 // Muscle struct defines a muscle
 type Muscle struct {
-	gorm.Model
-	Name        string
-	Description string
+	CommonModelFields
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 // Repository interface provides access to the muscles storage
 type Repository interface {
 	ListMuscles(ctx context.Context) ([]Muscle, error)
+	CreateMuscle(ctx context.Context, muscle *Muscle)
 }
 
 ////////////////////////////////////////
@@ -39,4 +40,9 @@ func (s *MuscleStorage) ListMuscles(ctx context.Context) ([]Muscle, error) {
 	var muscles []Muscle
 	err := s.db.Find(&muscles).Error
 	return muscles, err
+}
+
+// CreateMuscle func create a muscle record
+func (s *MuscleStorage) CreateMuscle(ctx context.Context, muscle *Muscle) {
+	s.db.Create(&muscle)
 }
